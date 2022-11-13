@@ -2,6 +2,7 @@ package at.feddis08.client;
 
 
 import at.feddis08.client.JFrames.LoginFrame;
+import at.feddis08.client.classes.UserObject;
 import at.feddis08.client.socket.Client;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class Start {
     public static String ip = "";
     public static String port = "";
     public static String spacing = "";
+    public static UserObject ownUser = new UserObject();
 
 
     public static void main(String[] args) throws IOException, InterruptedException {

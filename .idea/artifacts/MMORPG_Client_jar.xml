@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="MMORPG-Client:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MMORPG_Client_jar</output-path>
+    <root id="archive" name="MMORPG-Client.jar">
+      <element id="module-output" name="MMORPG-Client" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/de/mkammerer/argon2-jvm-nolibs/2.11/argon2-jvm-nolibs-2.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/de/mkammerer/argon2-jvm/2.1/argon2-jvm-2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/java/dev/jna/jna/4.2.1/jna-4.2.1.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources/res" />
+    </root>
+  </artifact>
+</component>

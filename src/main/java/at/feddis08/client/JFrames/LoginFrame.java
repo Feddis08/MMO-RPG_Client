@@ -29,7 +29,7 @@ public class LoginFrame extends Canvas{
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        Image icon = Toolkit.getDefaultToolkit().getImage("res/icon.png");
+        Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/res/icon.png");
         frame.setIconImage(icon);
 
         tfName.setForeground(Color.BLUE);

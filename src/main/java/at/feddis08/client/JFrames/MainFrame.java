@@ -20,17 +20,17 @@ public class MainFrame extends JFrame{
     public static void start() {
         frame.setTitle("MMORPG - MAIN");
         frame.setSize(1024, 512);
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        Image icon = Toolkit.getDefaultToolkit().getImage("res/icon.png");
+        Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/res/icon.png");
         frame.setIconImage(icon);
 
         Container c = frame.getContentPane();
         JLabel pictureLabel;
         pictureLabel = new JLabel();
         Dimension size = pictureLabel.getPreferredSize();
-        ImageIcon icon2 = new ImageIcon( "res/wallpapers/main/1.png");
+        ImageIcon icon2 = new ImageIcon( "src/main/resources/res/wallpapers/main/1.png");
         pictureLabel.setIcon(icon2);
         pictureLabel.setBounds(0, 0, 1024, 512);
         pictureLabel.setSize(1024, 512);
@@ -45,7 +45,7 @@ public class MainFrame extends JFrame{
         b1.setVisible(true);
         frame.add(b1);
 
-        b2.setText("?");
+        b2.setText("open chat");
         b2.setSize(256, 32);
         b2.setBackground(Color.GREEN);
         b2.setLocation(16, 80);
@@ -76,7 +76,25 @@ public class MainFrame extends JFrame{
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SetupFrame.start();
+                try {
+                    SetupFrame.start();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        b2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ChatFrame.start();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         frame.setVisible(true);

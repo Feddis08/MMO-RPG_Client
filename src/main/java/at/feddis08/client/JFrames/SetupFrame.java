@@ -14,13 +14,13 @@ public class SetupFrame extends Canvas {
     public static JTextField tfLast_name = new JTextField("Last Name");
     public static JButton b1 = new JButton();
     public static JLabel label1 = new JLabel();
-    public static void start(){
+    public static void start() throws IOException, InterruptedException {
         frame.setTitle("MMORPG - SETUP");
         frame.setSize(256, 256);
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        Image icon = Toolkit.getDefaultToolkit().getImage("res/icon.png");
+        Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/res/icon.png");
         frame.setIconImage(icon);
 
         tfFirst_name.setForeground(Color.BLUE);
@@ -64,5 +64,10 @@ public class SetupFrame extends Canvas {
             }
         });
         frame.setVisible(true);
+        frame.repaint();
+        Start.client.update_own_user();
+        Thread.sleep(250);
+        tfFirst_name.setText(Start.ownUser.first_name);
+        tfLast_name.setText(Start.ownUser.last_name);
     }
 }

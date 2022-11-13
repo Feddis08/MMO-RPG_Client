@@ -1,5 +1,6 @@
 package at.feddis08.client.socket;
 
+import at.feddis08.client.JFrames.ChatFrame;
 import at.feddis08.client.JFrames.LoginFrame;
 import at.feddis08.client.JFrames.MainFrame;
 import at.feddis08.client.JFrames.SetupFrame;
@@ -35,11 +36,13 @@ public class Client extends Thread{
             } catch (IOException e) {
                 e.printStackTrace();
                 th.stop();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
-    public void parse_request() throws IOException {
+    public void parse_request() throws IOException, InterruptedException {
 
 
         int index = 0;
@@ -53,7 +56,10 @@ public class Client extends Thread{
             if (Objects.equals(command[0], "join_allowed")){
                 Start.id = command[1];
                 LoginFrame.label1.setText("connected! " + command[1]);
+                update_own_user();
                 MainFrame.start();
+                send_chat_message("Hallo vom Client!");
+
             }
             if (Objects.equals(command[0], "join_not_allowed")){
                 LoginFrame.label1.setText(command[1]);
@@ -63,6 +69,16 @@ public class Client extends Thread{
             }
             if (Objects.equals(command[0], "start_setup")){
                 SetupFrame.start();
+            }
+            if (Objects.equals(command[0], "chat_message")){
+                ChatFrame.enteredText.insert(command[1] + "\n", ChatFrame.enteredText.getText().length());
+                ChatFrame.enteredText.setCaretPosition(ChatFrame.enteredText.getText().length());
+            }
+            if (Objects.equals(command[0], "get_own_user")){
+                Start.ownUser.id = command[1];
+                Start.ownUser.first_name = command[2];
+                Start.ownUser.last_name = command[3];
+                Start.ownUser.time_created = command[4];
             }
             if (Objects.equals(command[0], "setup_account_passed")){
                 SetupFrame.label1.setText("Setup passed!");
@@ -101,5 +117,11 @@ public class Client extends Thread{
     }
     public void setup_user(String first_name, String last_name) throws IOException {
         sendMessage("setup_account" + Start.spacing + first_name + Start.spacing + last_name);
+    }
+    public void update_own_user() throws IOException {
+        sendMessage("get_own_user");
+    }
+    public void send_chat_message(String message) throws IOException {
+        sendMessage("send_chat_message" + Start.spacing + message);
     }
 }
