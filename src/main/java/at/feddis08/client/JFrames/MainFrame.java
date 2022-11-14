@@ -38,7 +38,7 @@ public class MainFrame extends JFrame{
         frame.setVisible(true);
         c.setVisible(true);
 
-        b1.setText("change name");
+        b1.setText("open settings");
         b1.setSize(256, 32);
         b1.setBackground(Color.GREEN);
         b1.setLocation(16, 16);

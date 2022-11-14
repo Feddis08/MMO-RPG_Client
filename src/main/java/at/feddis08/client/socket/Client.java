@@ -42,6 +42,8 @@ public class Client extends Thread{
         }
     }
 
+    public Boolean startup = true;
+
     public void parse_request() throws IOException, InterruptedException {
 
 
@@ -57,9 +59,6 @@ public class Client extends Thread{
                 Start.id = command[1];
                 LoginFrame.label1.setText("connected! " + command[1]);
                 update_own_user();
-                MainFrame.start();
-                send_chat_message("Hallo vom Client!");
-
             }
             if (Objects.equals(command[0], "join_not_allowed")){
                 LoginFrame.label1.setText(command[1]);
@@ -87,6 +86,17 @@ public class Client extends Thread{
                 Start.ownUser.first_name = command[2];
                 Start.ownUser.last_name = command[3];
                 Start.ownUser.time_created = command[4];
+                Start.ownUser.data_json = command[5];
+                Start.ownUser.update_json();
+
+                if (startup) {
+                    MainFrame.start();
+                    if (Objects.equals(Start.ownUser.jsonObject.get("send_message_on_login").toString(), "true")) {
+                        send_chat_message(Start.ownUser.jsonObject.get("login_message").toString());
+                    }
+                    startup = false;
+                }
+
             }
             if (Objects.equals(command[0], "setup_account_passed")){
                 SetupFrame.label1.setText("Setup passed!");
@@ -123,8 +133,11 @@ public class Client extends Thread{
     public void try_server() throws IOException {
         sendMessage("try_server" + Start.spacing + "working!");
     }
-    public void setup_user(String first_name, String last_name) throws IOException {
-        sendMessage("setup_account" + Start.spacing + first_name + Start.spacing + last_name);
+    public void setup_user(String first_name, String last_name, String email_address, String send_message_on_login, String message_on_login) throws IOException {
+        Start.ownUser.jsonObject.put("email_address", email_address);
+        Start.ownUser.jsonObject.put("send_message_on_login", send_message_on_login);
+        Start.ownUser.jsonObject.put("login_message", message_on_login);
+        sendMessage("setup_account" + Start.spacing + first_name + Start.spacing + last_name + Start.spacing + Start.ownUser.jsonObject.toString());
     }
     public void update_own_user() throws IOException {
         sendMessage("get_own_user");
