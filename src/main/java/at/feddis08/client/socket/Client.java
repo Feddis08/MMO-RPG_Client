@@ -71,6 +71,14 @@ public class Client extends Thread{
                 SetupFrame.start();
             }
             if (Objects.equals(command[0], "chat_message")){
+                Start.chat_messages.add(command[1]);
+                if (Start.displayed_chat_messages.size() <= 16){
+                    Start.displayed_chat_messages.add(command[1]);
+                }else{
+                    Start.displayed_chat_messages.clear();
+                    Start.displayed_chat_messages.add(command[1]);
+                    ChatFrame.enteredText.setText("");
+                }
                 ChatFrame.enteredText.insert(command[1] + "\n", ChatFrame.enteredText.getText().length());
                 ChatFrame.enteredText.setCaretPosition(ChatFrame.enteredText.getText().length());
             }

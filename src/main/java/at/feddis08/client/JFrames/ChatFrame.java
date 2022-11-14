@@ -8,8 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class ChatFrame {
-    public static JTextArea  enteredText = new JTextArea();
+public class ChatFrame extends JFrame {
+    public static JTextArea  enteredText = new JTextArea(5, 40);
     public static JFrame frame = new JFrame();
     public static JTextField input_chat = new JTextField("");
     public static JButton b1 = new JButton();
@@ -22,7 +22,8 @@ public class ChatFrame {
         frame.setLocationRelativeTo(null);
         Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/res/icon.png");
         frame.setIconImage(icon);
-
+        Container c = frame.getContentPane();
+        frame.getContentPane().setLayout(new BorderLayout());
 
         enteredText.setEditable(false);
         enteredText.setBackground(Color.LIGHT_GRAY);
@@ -30,7 +31,6 @@ public class ChatFrame {
         enteredText.setSize(512, 443);
 
         frame.add(enteredText);
-
         input_chat.setForeground(Color.BLUE);
         input_chat.setBackground(Color.YELLOW);
         input_chat.setSize(448, 32);
@@ -45,11 +45,6 @@ public class ChatFrame {
         b1.setVisible(true);
         frame.add(b1);
 
-        label1.setSize(256, 32);
-        label1.setLocation(0, 0);
-        label1.setText("Your account is not set up yet!");
-        label1.setVisible(true);
-        frame.add(label1);
 
         frame.setLayout(null);
         b1.addActionListener(new ActionListener() {
