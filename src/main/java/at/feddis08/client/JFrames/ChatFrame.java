@@ -1,6 +1,7 @@
 package at.feddis08.client.JFrames;
 
 import at.feddis08.client.Start;
+import at.feddis08.client.main.Microphone;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,5 +60,11 @@ public class ChatFrame extends JFrame {
             }
         });
         frame.setVisible(true);
+        Start.client.sendMessage("go_in_chat");
+        //Microphone.do_output();
+    }
+    public static void add_text_line(String line){
+        ChatFrame.enteredText.insert(line + "\n", ChatFrame.enteredText.getText().length());
+        ChatFrame.enteredText.setCaretPosition(ChatFrame.enteredText.getText().length());
     }
 }

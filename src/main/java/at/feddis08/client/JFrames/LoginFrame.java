@@ -3,6 +3,7 @@ package at.feddis08.client.JFrames;
 import at.feddis08.client.Start;
 import at.feddis08.client.socket.Client;
 
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -97,6 +98,8 @@ public class LoginFrame extends Canvas{
                         throw new RuntimeException(ex);
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);
+                    } catch (LineUnavailableException ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
             }
@@ -121,6 +124,8 @@ public class LoginFrame extends Canvas{
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (LineUnavailableException ex) {
                         throw new RuntimeException(ex);
                     }
                     try {

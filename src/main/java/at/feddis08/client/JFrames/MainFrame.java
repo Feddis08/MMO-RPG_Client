@@ -20,7 +20,7 @@ public class MainFrame extends JFrame{
     public static void start() {
         frame.setTitle("MMORPG - MAIN");
         frame.setSize(1024, 512);
-        //frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/res/icon.png");
@@ -52,7 +52,7 @@ public class MainFrame extends JFrame{
         b2.setVisible(true);
         frame.add(b2);
 
-        b3.setText("?");
+        b3.setText("open console");
         b3.setSize(256, 32);
         b3.setBackground(Color.GREEN);
         b3.setLocation(16, 144);
@@ -90,6 +90,18 @@ public class MainFrame extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                     ChatFrame.start();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        b3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ConsoleFrame.start();
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 } catch (InterruptedException ex) {

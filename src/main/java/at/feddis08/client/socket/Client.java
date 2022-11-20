@@ -1,18 +1,23 @@
 package at.feddis08.client.socket;
 
-import at.feddis08.client.JFrames.ChatFrame;
-import at.feddis08.client.JFrames.LoginFrame;
-import at.feddis08.client.JFrames.MainFrame;
-import at.feddis08.client.JFrames.SetupFrame;
+import at.feddis08.client.JFrames.*;
 import at.feddis08.client.Start;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import javax.sound.sampled.*;
+import java.io.*;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Objects;
+
+import at.feddis08.client.main.Microphone;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Client extends Thread{
     private Socket clientSocket;
@@ -20,9 +25,10 @@ public class Client extends Thread{
     private BufferedReader input;
     private ArrayList<String> requests = new ArrayList<>();
     private Thread th = this;
-    private ArrayList<String> sendLsBuffer = new ArrayList<>();
 
-    public void startConnection(String ip, int port) throws IOException, InterruptedException {
+
+
+    public void startConnection(String ip, int port) throws IOException, InterruptedException, LineUnavailableException {
         clientSocket = new Socket(ip, port);
         output = new PrintWriter(clientSocket.getOutputStream(), true);
         input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -38,18 +44,20 @@ public class Client extends Thread{
                 th.stop();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
+            } catch (LineUnavailableException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
     public Boolean startup = true;
 
-    public void parse_request() throws IOException, InterruptedException {
+    public void parse_request() throws IOException, InterruptedException, LineUnavailableException {
 
 
         int index = 0;
         while (index < requests.size()){
-            System.out.println(requests.get(index));
+            //System.out.println(requests.get(index));
             if (requests.get(index).split("SPACING").length > 1 ){
                 Start.spacing = requests.get(index).split("SPACING")[1];
             }
@@ -59,12 +67,24 @@ public class Client extends Thread{
                 Start.id = command[1];
                 LoginFrame.label1.setText("connected! " + command[1]);
                 update_own_user();
+                sendMessage("get_server_info");
+                sendMessage("ping");
+                //get_list_files("/home/mc/");
+                //get_file("/home/mc/MMORPG/");
+                //Microphone.start();
             }
             if (Objects.equals(command[0], "join_not_allowed")){
                 LoginFrame.label1.setText(command[1]);
             }
+            if (Objects.equals(command[0], "send_server_info")){
+                Start.server_info = new JSONObject(command[1]);
+                System.out.println(Start.server_info);
+            }
             if (Objects.equals(command[0], "try_join")){
                 LoginFrame.label1.setText(command[1]);
+            }
+            if (Objects.equals(command[0], "pong")){
+                sendMessage("ping");
             }
             if (Objects.equals(command[0], "start_setup")){
                 SetupFrame.start();
@@ -78,8 +98,7 @@ public class Client extends Thread{
                     Start.displayed_chat_messages.add(command[1]);
                     ChatFrame.enteredText.setText("");
                 }
-                ChatFrame.enteredText.insert(command[1] + "\n", ChatFrame.enteredText.getText().length());
-                ChatFrame.enteredText.setCaretPosition(ChatFrame.enteredText.getText().length());
+                ChatFrame.add_text_line(command[1]);
             }
             if (Objects.equals(command[0], "get_own_user")){
                 Start.ownUser.id = command[1];
@@ -100,6 +119,25 @@ public class Client extends Thread{
             }
             if (Objects.equals(command[0], "setup_account_passed")){
                 SetupFrame.label1.setText("Setup passed!");
+            }
+            if (Objects.equals(command[0], "send_list_files")){
+                String[] list_files = deserializeArray(command[1]);
+                Start.list_files.add(list_files);
+                System.out.println(Arrays.toString(Start.list_files.get(0)));
+            }
+            if (Objects.equals(command[0], "send_file")){
+                System.out.println(Start.ownUser.jsonObject.getString("download_path") + " " + Arrays.toString(Base64.getDecoder().decode(command[2])));
+                FileUtils.writeByteArrayToFile(new File(Start.ownUser.jsonObject.getString("download_path") + command[1]), Base64.getDecoder().decode(command[2]));
+                ConsoleFrame.add_text_line("download: " + command[1] + " finished!");
+            }
+            if (Objects.equals(command[0], "post_file_finished")){
+                ConsoleFrame.add_text_line("upload: " + command[1] + " finished!");
+            }
+            if (Objects.equals(command[0], "audio_output_stream")){
+                System.out.println(Start.client.requests.size());
+                byte[] data = Base64.getDecoder().decode(command[1]);
+                //System.out.println(Arrays.toString(data));
+                Microphone.do_input(data);
             }
             if (Objects.equals(command[0], "setup_account_not_passed")){
                 SetupFrame.label1.setText("Setup did not pass! Please try again!");
@@ -133,16 +171,43 @@ public class Client extends Thread{
     public void try_server() throws IOException {
         sendMessage("try_server" + Start.spacing + "working!");
     }
-    public void setup_user(String first_name, String last_name, String email_address, String send_message_on_login, String message_on_login) throws IOException {
+    public void setup_user(String first_name, String last_name, String email_address, String send_message_on_login, String message_on_login, String download_path) throws IOException {
         Start.ownUser.jsonObject.put("email_address", email_address);
         Start.ownUser.jsonObject.put("send_message_on_login", send_message_on_login);
         Start.ownUser.jsonObject.put("login_message", message_on_login);
+        Start.ownUser.jsonObject.put("download_path", download_path);
         sendMessage("setup_account" + Start.spacing + first_name + Start.spacing + last_name + Start.spacing + Start.ownUser.jsonObject.toString());
     }
     public void update_own_user() throws IOException {
         sendMessage("get_own_user");
     }
+    public void get_list_files(String path) throws IOException {
+        sendMessage("get_list_files" + Start.spacing + path);
+    }
+    public void post_file(String path_name, byte[] data) throws IOException {
+        sendMessage("post_file" + Start.spacing + path_name + Start.spacing + Base64.getEncoder().encodeToString(data));
+    }
+    public void get_file(String path) throws IOException {
+        sendMessage("get_file" + Start.spacing + path);
+    }
     public void send_chat_message(String message) throws IOException {
         sendMessage("send_chat_message" + Start.spacing + message);
+    }
+    public String serializeArray(final String[] data) {
+        try (final ByteArrayOutputStream boas = new ByteArrayOutputStream();
+             final ObjectOutputStream oos = new ObjectOutputStream(boas)) {
+            oos.writeObject(data);
+            return Base64.getEncoder().encodeToString(boas.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public String[] deserializeArray(final String data) {
+        try (final ByteArrayInputStream bias = new ByteArrayInputStream(Base64.getDecoder().decode(data));
+             final ObjectInputStream ois = new ObjectInputStream(bias)) {
+            return (String[]) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -14,6 +14,7 @@ public class SetupFrame extends Canvas {
     public static JTextField tfFirst_name = new JTextField("First Name");
     public static JTextField tfLast_name = new JTextField("Last Name");
     public static JTextField login_message = new JTextField("");
+    public static JTextField download_path = new JTextField("download_path");
     public static JTextField email_address = new JTextField("email_address");
     public static JButton b1 = new JButton();
     public static JCheckBox checkBox1 = new JCheckBox("send message on login");
@@ -63,10 +64,17 @@ public class SetupFrame extends Canvas {
         checkBox1.setVisible(true);
         frame.add(checkBox1);
 
+        download_path.setForeground(Color.BLUE);
+        download_path.setBackground(Color.YELLOW);
+        download_path.setSize(256, 32);
+        download_path.setLocation(0,160);
+        download_path.setVisible(true);
+        frame.add(download_path);
+
         b1.setText("submit");
         b1.setSize(256, 32);
         b1.setBackground(Color.GREEN);
-        b1.setLocation(0, 160);
+        b1.setLocation(0, 192);
         b1.setVisible(true);
         frame.add(b1);
 
@@ -82,7 +90,7 @@ public class SetupFrame extends Canvas {
             public void actionPerformed(ActionEvent e) {
 
                 try {
-                    Start.client.setup_user(tfFirst_name.getText(), tfLast_name.getText(), email_address.getText(), String.valueOf(checkBox1.isSelected()), login_message.getText());
+                    Start.client.setup_user(tfFirst_name.getText(), tfLast_name.getText(), email_address.getText(), String.valueOf(checkBox1.isSelected()), login_message.getText(), download_path.getText());
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -99,6 +107,7 @@ public class SetupFrame extends Canvas {
         tfLast_name.setText(Start.ownUser.last_name);
         email_address.setText(Start.ownUser.jsonObject.get("email_address").toString());
         login_message.setText(Start.ownUser.jsonObject.get("login_message").toString());
+        download_path.setText(Start.ownUser.jsonObject.get("download_path").toString());
         if (Objects.equals(Start.ownUser.jsonObject.get("send_message_on_login").toString(), "true")) checkBox1.setSelected(true);
 
     }
