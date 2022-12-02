@@ -14,14 +14,13 @@ public class ConsoleFrame extends JFrame {
     public static JTextArea  enteredText = new JTextArea(10, 40);
     public static JFrame frame = new JFrame();
     public static JTextField input_chat = new JTextField("");
-    public static JPanel text = new JPanel();
     public static JScrollPane scroll = new JScrollPane();
     public static JButton b1 = new JButton();
-    public static JLabel label1 = new JLabel();
     public static void start() throws IOException, InterruptedException {
+        frame = new JFrame();
         frame.setTitle("MMORPG - CONSOLE");
         //frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-        frame.setResizable(true);
+        frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setSize(512, 256);
         Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/res/icon.png");
@@ -29,8 +28,7 @@ public class ConsoleFrame extends JFrame {
         Container c = frame.getContentPane();
         frame.getContentPane().setLayout(new BorderLayout());
 
-
-
+        enteredText = new JTextArea(10, 40);
         enteredText.setEditable(false);
         enteredText.setBackground(Color.LIGHT_GRAY);
         enteredText.setLineWrap(true);
@@ -56,6 +54,7 @@ public class ConsoleFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+
                     add_text_line("");
                     add_text_line("> " + input_chat.getText());
                     ConsoleParser.parse(input_chat.getText());
@@ -72,7 +71,6 @@ public class ConsoleFrame extends JFrame {
         add_text_line("Console ...");
         add_text_line("Hi " + Start.ownUser.first_name + " " + Start.ownUser.last_name + ", you are connected with: " + Start.server_info.getString("server_name"));
         add_text_line("current stats: " + Start.server_info);
-        //Microphone.do_output();
     }
     public static void add_text_line(String line){
         ConsoleFrame.enteredText.insert(line + "\n", ConsoleFrame.enteredText.getText().length());

@@ -1,4 +1,5 @@
 at\feddis08\client\JFrames\MainFrame$1.class
+at\feddis08\client\JFrames\ConsoleFrame$1.class
 at\feddis08\client\classes\UserObject.class
 at\feddis08\client\JFrames\ChatFrame.class
 at\feddis08\client\JFrames\LoginFrame$1.class
@@ -9,8 +10,11 @@ at\feddis08\client\main\Microphone$1.class
 at\feddis08\client\JFrames\LoginFrame$2.class
 at\feddis08\client\JFrames\LoginFrame.class
 at\feddis08\client\Start.class
+at\feddis08\client\JFrames\MainFrame$3.class
 at\feddis08\client\JFrames\MainFrame.class
 at\feddis08\client\JFrames\ChatFrame$1.class
+at\feddis08\client\main\ConsoleParser.class
 at\feddis08\client\JFrames\SetupFrame$1.class
 at\feddis08\client\main\Microphone.class
+at\feddis08\client\JFrames\ConsoleFrame.class
 at\feddis08\client\socket\Client.class

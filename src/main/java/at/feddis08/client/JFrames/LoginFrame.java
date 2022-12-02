@@ -14,9 +14,9 @@ public class LoginFrame extends Canvas{
 
 
     public static JFrame frame = new JFrame();
-    public static JTextField tfName = new JTextField("Felix");
-    public static JTextField tfServerName = new JTextField("feddis08.com:25566");
-    public static JTextField tfToken = new JTextField("felix123");
+    public static JTextField tfName = new JTextField("");
+    public static JTextField tfServerName = new JTextField("feddis.ddns.net:25566");
+    public static JTextField tfToken = new JTextField("");
     public static JButton b1 = new JButton();
     public static JButton b2 = new JButton();
     public static JButton b3 = new JButton();
